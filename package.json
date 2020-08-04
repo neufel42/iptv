@@ -9,6 +9,7 @@
     "react": "^16.10.2",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-dom": "^16.10.2",
+    "react-epg": "^0.1.1",
     "react-player": "^1.13.0",
     "react-scripts": "^3.4.1"
   },

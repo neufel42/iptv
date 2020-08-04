@@ -8690,6 +8690,11 @@ react-dom@^16.10.2:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
+react-epg@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/react-epg/-/react-epg-0.1.1.tgz#24456d5588fc02b6aa26db66f7a434abd49ab389"
+  integrity sha512-Ag+oxeOVpkdYCS864D9j2CKdq6GPZbQ7heQHoBw2ZGvEeNvG4oo+y7bJy/hrh7odM8NB4AsQ6WzFU7qODZwYqA==
+
 react-error-overlay@^6.0.7:
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.7.tgz#1dcfb459ab671d53f660a991513cb2f0a0553108"

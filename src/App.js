@@ -6,10 +6,10 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import NavbarBrand from "react-bootstrap/NavbarBrand";
 import Nav from "react-bootstrap/Nav";
 //import axios from 'axios';
-import ReactPlayer from "react-player";
 import './App.css';
-import Splash from "./components/Splash";
-import m3uList from "./sources/m3u"
+import m3uList from "./sources/m3u";
+import vlcUtil from "./utils/vlcUtil";
+import EPG, { Channel, TimeLine, TimeSlot, Show } from 'react-epg';
 
 // these channels are excluded as their CORS policies don't allow them to load
 //const excludedChannels = [
@@ -41,10 +41,17 @@ class App extends Component {
 
     async getChannelList() {
         // const res = await axios.get('https://i.mjh.nz/nz/tv.json');
-        // const channelList = res.data;
-        console.log(m3uList); 
+        // const channelList = res.data;        
+        // TODO: do not hardcode!
+        var fileName = "file:///home/david/projects/iptv/src/sources/detroit.m3u";
+
+        var jsonData = await vlcUtil.loadFile(fileName);
+        var playListData = await vlcUtil.getCurrentPlaylist();
+        console.log(playListData);
+
+        console.log('m3uList', m3uList); 
         const channelList = m3uList.channels;
-        console.log(channelList);
+        console.log('channelList', channelList);
 
         //Object.keys(channelList)
         //    .filter(key => excludedChannels.includes(key))
@@ -61,8 +68,11 @@ class App extends Component {
         return channel.url;
     }
 
-    chooseChannel(e, channel) {
+    chooseChannel(e, channel) {        
         e.preventDefault();
+
+        console.log('Changed Channel', channel);
+        vlcUtil.runVlc('pl_stop');
         this.setState({
             selected: channel
         })
@@ -86,10 +96,26 @@ class App extends Component {
                             Currently Playing: {this.state.selected.name}
                         </Navbar.Text>
                     : null}
-                </Navbar>
-                <ReactPlayer className="player-wrapper" url={this.state.selected ? this.getSecureStreamingUrl(this.state.selected) : ''} controls playing width='100%'
-                             height='100%'/>
-                {this.state.selected === null ? <Splash/> : null}
+                </Navbar> 
+                <EPG>
+    <TimeLine channel={<Channel name="Sky" />}>
+      <TimeSlot start={new Date('1/1/97 16:00')} end={new Date('1/1/97 16:30')}>
+        <Show title="The Simpsons" />
+      </TimeSlot>
+      <TimeSlot start={new Date('1/1/97 16:30')} end={new Date('1/1/97 17:30')}>
+        <Show title="Inception" />
+      </TimeSlot>
+    </TimeLine>
+    <TimeLine channel={<Channel name="Dave" />}>
+      <TimeSlot start={new Date('1/1/97 16:00')} end={new Date('1/1/97 17:00')}>
+        <Show title="Top Gear" />
+      </TimeSlot>
+      <TimeSlot start={new Date('1/1/97 17:00')} end={new Date('1/1/97 18:45')}>
+        <Show title="Shrek 3" />
+      </TimeSlot>
+    </TimeLine>
+  </EPG>
+               
             </Container>
         );
     }
