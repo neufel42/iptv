@@ -40,11 +40,29 @@ class vlcUtil {
     async getCurrentPlaylist() {
         try {
             const playlist = await this.runVlc('playlist');
-            return JSON.parse(playlist).item.item;
+
+            var actualChannels = JSON.parse(playlist).item.item[0].item;
+            
+            if (actualChannels) {
+                var cleanChannels = actualChannels.map(function (channel) {
+                    var cleanChannel = channel._attributes;
+                    cleanChannel.id = cleanChannel.id.substr(5);
+                
+                    return cleanChannel;
+                });
+
+                return cleanChannels;
+            }
+
+            return [];
         }
         catch (error) {
             return console.error(error);
         }
+    }
+
+    async play(id) {
+        return this.runVlc('pl_play&id=' + id);
     }
 
 }

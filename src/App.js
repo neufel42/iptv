@@ -7,7 +7,6 @@ import NavbarBrand from "react-bootstrap/NavbarBrand";
 import Nav from "react-bootstrap/Nav";
 //import axios from 'axios';
 import './App.css';
-import m3uList from "./sources/m3u";
 import vlcUtil from "./utils/vlcUtil";
 import EPG, { Channel, TimeLine, TimeSlot, Show } from 'react-epg';
 
@@ -45,12 +44,11 @@ class App extends Component {
         // TODO: do not hardcode!
         var fileName = "file:///home/david/projects/iptv/src/sources/detroit.m3u";
 
-        var jsonData = await vlcUtil.loadFile(fileName);
+        await vlcUtil.loadFile(fileName);
         var playListData = await vlcUtil.getCurrentPlaylist();
         console.log(playListData);
-
-        console.log('m3uList', m3uList); 
-        const channelList = m3uList.channels;
+ 
+        const channelList = playListData;
         console.log('channelList', channelList);
 
         //Object.keys(channelList)
@@ -68,11 +66,12 @@ class App extends Component {
         return channel.url;
     }
 
-    chooseChannel(e, channel) {        
+    async chooseChannel(e, channel) {        
         e.preventDefault();
 
-        console.log('Changed Channel', channel);
-        vlcUtil.runVlc('pl_stop');
+        console.log('Changed Channel 2', channel);
+        var playResult = await vlcUtil.play(channel.id);
+        console.log('playResult', playResult);
         this.setState({
             selected: channel
         })
